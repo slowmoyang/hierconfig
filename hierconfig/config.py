@@ -4,6 +4,7 @@ from dataclasses import Field
 from dataclasses import dataclass
 from dataclasses import asdict
 from dataclasses import MISSING
+from dataclasses import make_dataclass
 import argparse
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from argparse import Namespace
@@ -241,14 +242,20 @@ class ConfigBase:
         return json.dumps(self.to_dict(), indent=4)
 
 
+
+def hierconfig(cls):
+    """decorator"""
+    return make_dataclass(cls.__name__, fields=[], bases=(ConfigBase, ))
+
+
 def is_config_class(test_cls):
     return inspect.isclass(test_cls) and issubclass(test_cls, ConfigBase)
 
 
 def config_field(help: Optional[str] = None,
                  choices: Optional[tuple[Any, ...]] = None,
+                 metadata: dict = {},
                  **kwargs):
-    metadata = {}
     if help is not None:
         metadata['help'] = help
     if choices is not None:
