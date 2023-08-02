@@ -247,7 +247,7 @@ def hierconfig(cls):
     """decorator"""
     fields = [(key, value) + ((getattr(cls, key), ) if hasattr(cls, key) else ())
               for key, value in cls.__annotations__.items()]
-    return make_dataclass(cls.__name__, fields=fields, bases=(ConfigBase, ))
+    return make_dataclass(cls.__name__, fields=fields, bases=(ConfigBase, cls))
 
 
 def is_config_class(test_cls):
