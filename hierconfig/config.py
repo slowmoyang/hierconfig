@@ -245,7 +245,8 @@ class ConfigBase:
 
 def hierconfig(cls):
     """decorator"""
-    fields = [(key, value) for key, value in cls.__annotations__.items()]
+    fields = [(key, value) + ((getattr(cls, key), ) if hasattr(cls, key) else ())
+              for key, value in cls.__annotations__.items()]
     return make_dataclass(cls.__name__, fields=fields, bases=(ConfigBase, ))
 
 
